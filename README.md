@@ -49,6 +49,7 @@ stt/
 ├── infer.py
 ├── metrics.py
 ├── model.py
+├── prepare_data.py
 ├── requirements.txt
 ├── stt_quickstart.ipynb
 ├── text.py
@@ -57,6 +58,28 @@ stt/
 └── configs
     ├── ljspeech_fast.yaml
     └── tiny_debug.yaml
+```
+
+## Download LJSpeech from Hugging Face
+
+This repo now includes [prepare_data.py](/Users/pradeep.borado/misc/stt/prepare_data.py), which downloads the official Hugging Face `keithito/lj_speech` dataset and writes it into the standard LJSpeech folder layout expected by training.
+
+Download the full dataset:
+
+```bash
+python prepare_data.py --output-dir data/LJSpeech-1.1
+```
+
+Optional partial download for quick setup checks:
+
+```bash
+python prepare_data.py --output-dir data/LJSpeech-1.1 --max-samples 200
+```
+
+Rebuild the destination folder from scratch:
+
+```bash
+python prepare_data.py --output-dir data/LJSpeech-1.1 --force
 ```
 
 ## LJSpeech layout
@@ -82,6 +105,12 @@ The training script reads the standard `metadata.csv` and creates JSONL manifest
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
+
+Then download LJSpeech:
+
+```bash
+python prepare_data.py --output-dir data/LJSpeech-1.1
 ```
 
 ## Recommended config to start with

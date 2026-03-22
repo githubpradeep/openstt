@@ -33,7 +33,10 @@ def build_ljspeech_manifest(dataset_root: str | Path, manifest_path: str | Path)
     root = Path(dataset_root)
     metadata_path = root / "metadata.csv"
     if not metadata_path.exists():
-        raise FileNotFoundError(f"metadata.csv not found under {root}")
+        raise FileNotFoundError(
+            f"metadata.csv not found under {root}. "
+            f"Run `python prepare_data.py --output-dir {root}` first, or point --dataset-root to an existing LJSpeech folder."
+        )
 
     records: List[Dict[str, str]] = []
     with metadata_path.open("r", encoding="utf-8") as handle:
