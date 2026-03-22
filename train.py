@@ -316,6 +316,16 @@ def main() -> None:
         lr=float(config["training"]["lr"]),
         weight_decay=float(config["training"]["weight_decay"]),
     )
+    scheduler = None
+    scheduler_config = config["training"].get("scheduler", {})
+    if scheduler_config.get("name") == "reduce_on_plateau":
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode="min",
+            factor=float(scheduler_config.get("factor", 0.5)),
+            patience=int(scheduler_config.get("patience", 3)),
+            min_lr=float(scheduler_config.get("min_lr", 1.0e-5)),
+        )
     scaler = torch.cuda.amp.GradScaler(enabled=bool(config["training"]["amp"]) and device.type == "cuda")
     criterion = nn.CTCLoss(blank=tokenizer.blank_id, zero_infinity=True)
 
@@ -379,6 +389,8 @@ def main() -> None:
                 print(f"  sample: {sample['audio_path']}")
                 print(f"    ref : {sample['reference']}")
                 print(f"    pred: {sample['prediction']}")
+            if scheduler is not None:
+                scheduler.step(val_metrics["loss"])
 
         if val_metrics is not None and val_metrics["cer"] < best_cer:
             best_cer = float(val_metrics["cer"])

@@ -57,6 +57,12 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "save_every_epoch": True,
         "resume_from": None,
         "cudnn_benchmark": True,
+        "scheduler": {
+            "name": None,
+            "factor": 0.5,
+            "patience": 3,
+            "min_lr": 1.0e-5,
+        },
     },
     "debug": {
         "print_batch_shapes": True,
