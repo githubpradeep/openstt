@@ -62,7 +62,17 @@ stt/
 
 ## Download LJSpeech from Hugging Face
 
-This repo now includes [prepare_data.py](/Users/pradeep.borado/misc/stt/prepare_data.py), which downloads the official Hugging Face `keithito/lj_speech` dataset and writes it into the standard LJSpeech folder layout expected by training.
+This repo now includes [prepare_data.py](/Users/pradeep.borado/misc/stt/prepare_data.py), which downloads LJSpeech from Hugging Face and writes it into the standard LJSpeech folder layout expected by training.
+
+Default source:
+
+- `flexthink/ljspeech`
+
+Why this default:
+
+- the original `keithito/lj_speech` repo on Hugging Face still relies on a legacy loading script
+- current versions of `datasets` no longer support dataset scripts
+- this project therefore defaults to a Hugging Face dataset repo that already contains `metadata.csv` and `wavs/` directly
 
 Download the full dataset:
 
@@ -70,16 +80,16 @@ Download the full dataset:
 python prepare_data.py --output-dir data/LJSpeech-1.1
 ```
 
-Optional partial download for quick setup checks:
-
-```bash
-python prepare_data.py --output-dir data/LJSpeech-1.1 --max-samples 200
-```
-
 Rebuild the destination folder from scratch:
 
 ```bash
 python prepare_data.py --output-dir data/LJSpeech-1.1 --force
+```
+
+If you want to override the Hugging Face source manually:
+
+```bash
+python prepare_data.py --repo-id flexthink/ljspeech --output-dir data/LJSpeech-1.1
 ```
 
 ## LJSpeech layout
