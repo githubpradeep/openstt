@@ -56,7 +56,9 @@ stt/
 ├── train.py
 ├── utils.py
 └── configs
+    ├── ljspeech_better.yaml
     ├── ljspeech_fast.yaml
+    ├── ljspeech_usable.yaml
     └── tiny_debug.yaml
 ```
 
@@ -137,6 +139,8 @@ It is the fastest path to checking that:
 
 After that, move to `configs/ljspeech_fast.yaml`.
 
+If you want a stronger full-dataset run with light regularization and slightly more capacity, use `configs/ljspeech_better.yaml`.
+
 ## Training
 
 ### Tiny debug run
@@ -180,6 +184,19 @@ Then run:
 
 ```bash
 python train.py --config configs/ljspeech_fast.yaml --dataset-root data/LJSpeech-1.1
+```
+
+### Train a stronger full-dataset model
+
+This keeps the same simple CNN + BiLSTM + CTC design but adds:
+
+- light time masking
+- light frequency masking
+- slightly higher dropout
+- slightly larger CNN/LSTM widths
+
+```bash
+python train.py --config configs/ljspeech_better.yaml --dataset-root data/LJSpeech-1.1
 ```
 
 ### Resume training
