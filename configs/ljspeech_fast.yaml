@@ -1,0 +1,51 @@
+experiment:
+  name: ljspeech_fast
+  output_dir: runs/ljspeech_fast
+
+dataset:
+  root: data/LJSpeech-1.1
+  val_ratio: 0.05
+  seed: 1337
+  subset_size: 1000
+  val_subset_size: 128
+  overfit_mode: false
+  overfit_size: 20
+
+audio:
+  sample_rate: 16000
+  n_fft: 400
+  win_length: 400
+  hop_length: 160
+  n_mels: 80
+  time_mask_param: 0
+  freq_mask_param: 0
+
+model:
+  cnn_channels: [32, 64]
+  cnn_time_strides: [2, 2]
+  cnn_dropout: 0.1
+  lstm_input_size: 256
+  lstm_hidden_size: 256
+  lstm_layers: 3
+  dropout: 0.1
+
+training:
+  batch_size: 16
+  num_workers: 2
+  epochs: 20
+  lr: 0.001
+  weight_decay: 0.0001
+  grad_clip: 5.0
+  amp: true
+  log_interval: 10
+  val_interval: 1
+  save_every_epoch: true
+
+debug:
+  print_batch_shapes: true
+  print_spectrogram_stats: true
+  verify_output_lengths: true
+  run_forward_pass: true
+  run_backward_pass: true
+  print_predictions_before_training: true
+  sample_predictions: 3
