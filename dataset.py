@@ -29,6 +29,15 @@ def _write_jsonl(records: Sequence[Dict[str, str]], path: str | Path) -> None:
             handle.write(json.dumps(record, ensure_ascii=True) + "\n")
 
 
+def _prepared_manifest_paths(dataset_root: str | Path) -> tuple[Path, Path] | None:
+    root = Path(dataset_root)
+    train_manifest = root / "manifests" / "train.jsonl"
+    val_manifest = root / "manifests" / "val.jsonl"
+    if train_manifest.exists() and val_manifest.exists():
+        return train_manifest, val_manifest
+    return None
+
+
 def build_ljspeech_manifest(dataset_root: str | Path, manifest_path: str | Path) -> List[Dict[str, str]]:
     root = Path(dataset_root)
     metadata_path = root / "metadata.csv"
@@ -96,9 +105,15 @@ def prepare_ljspeech_splits(
 ) -> Dict[str, object]:
     output_dir = Path(output_dir)
     manifest_dir = output_dir / "manifests"
-    all_manifest = manifest_dir / "all.jsonl"
-    records = build_ljspeech_manifest(dataset_root, all_manifest)
-    train_records, val_records = _split_records(records, val_ratio=val_ratio, seed=seed)
+    prepared_paths = _prepared_manifest_paths(dataset_root)
+    if prepared_paths is not None:
+        source_train_manifest, source_val_manifest = prepared_paths
+        train_records = _read_jsonl(source_train_manifest)
+        val_records = _read_jsonl(source_val_manifest)
+    else:
+        all_manifest = manifest_dir / "all.jsonl"
+        records = build_ljspeech_manifest(dataset_root, all_manifest)
+        train_records, val_records = _split_records(records, val_ratio=val_ratio, seed=seed)
 
     if overfit_mode:
         overfit_records = _select_subset(train_records, overfit_size, seed)

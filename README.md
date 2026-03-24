@@ -57,6 +57,7 @@ stt/
 ├── utils.py
 └── configs
     ├── blog_timit_fast.yaml
+    ├── librispeech_clean100.yaml
     ├── ljspeech_better.yaml
     ├── ljspeech_fast.yaml
     ├── ljspeech_usable.yaml
@@ -113,6 +114,30 @@ Then train with:
 ```bash
 python train.py --config configs/blog_timit_fast.yaml --dataset-root data/idrak_timit_subsample1
 ```
+
+### LibriSpeech for a stronger multi-speaker model
+
+If you want a more realistic from-scratch STT run than LJSpeech, use LibriSpeech `train-clean-100` with official `dev-clean` and `test-clean` splits preserved.
+
+Download and prepare it:
+
+```bash
+python prepare_data.py --source librispeech --output-dir data/LibriSpeech
+```
+
+This pulls the official OpenSLR archives for:
+
+- `train-clean-100`
+- `dev-clean`
+- `test-clean`
+
+Then train:
+
+```bash
+python train.py --config configs/librispeech_clean100.yaml --dataset-root data/LibriSpeech
+```
+
+This config is the recommended next step if your goal is better multi-speaker generalization from the same simple CNN + BiLSTM + CTC design.
 
 ## LJSpeech layout
 
