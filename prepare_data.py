@@ -225,7 +225,7 @@ def prepare_librispeech(output_dir: Path, selected_splits: list[str]) -> None:
 def main() -> None:
     args = parse_args()
     source = SOURCES[args.source]
-    repo_id = args.repo_id or source["repo_id"]
+    repo_id = args.repo_id or source.get("repo_id")
     output_dir = Path(args.output_dir).resolve()
     metadata_path = output_dir / "metadata.csv"
     wavs_dir = output_dir / "wavs"
@@ -270,7 +270,8 @@ def main() -> None:
         shutil.rmtree(cache_dir)
 
     print(f"source: {args.source}")
-    print(f"source repo: {repo_id}")
+    if repo_id is not None:
+        print(f"source repo: {repo_id}")
     print(f"saved dataset to {output_dir}")
     print(f"wav files: {wav_count}")
     print(f"metadata: {metadata_path}")
