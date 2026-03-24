@@ -56,6 +56,7 @@ stt/
 ├── train.py
 ├── utils.py
 └── configs
+    ├── blog_timit_fast.yaml
     ├── ljspeech_better.yaml
     ├── ljspeech_fast.yaml
     ├── ljspeech_usable.yaml
@@ -92,6 +93,25 @@ If you want to override the Hugging Face source manually:
 
 ```bash
 python prepare_data.py --repo-id flexthink/ljspeech --output-dir data/LJSpeech-1.1
+```
+
+### Blog post dataset
+
+This repo can also prepare the smaller TIMIT-based subset used in the blog post you linked:
+
+- source name: `blog_timit`
+- repo: `m-aliabbas/idrak_timit_subsample1`
+
+Download and export it into the same standard folder layout:
+
+```bash
+python prepare_data.py --source blog_timit --output-dir data/idrak_timit_subsample1
+```
+
+Then train with:
+
+```bash
+python train.py --config configs/blog_timit_fast.yaml --dataset-root data/idrak_timit_subsample1
 ```
 
 ## LJSpeech layout
