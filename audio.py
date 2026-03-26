@@ -1,14 +1,20 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Iterable, Tuple
+from typing import Tuple
 
+import numpy as np
+import soundfile as sf
 import torch
 import torchaudio
 
 
 def load_audio(audio_path: str | Path, sample_rate: int) -> torch.Tensor:
-    waveform, sr = torchaudio.load(str(audio_path))
+    try:
+        waveform, sr = torchaudio.load(str(audio_path))
+    except RuntimeError:
+        audio, sr = sf.read(str(audio_path), dtype="float32", always_2d=True)
+        waveform = torch.from_numpy(np.asarray(audio).T)
     if waveform.size(0) > 1:
         waveform = waveform.mean(dim=0, keepdim=True)
     if sr != sample_rate:
