@@ -21,17 +21,17 @@ audio:
   freq_mask_param: 6
 
 model:
-  cnn_channels: [48, 96]
+  cnn_channels: [64, 128]
   cnn_time_strides: [2, 2]
   cnn_dropout: 0.15
-  lstm_input_size: 320
-  lstm_hidden_size: 320
+  lstm_input_size: 384
+  lstm_hidden_size: 384
   lstm_layers: 3
   dropout: 0.2
 
 training:
-  batch_size: 16
-  num_workers: 4
+  batch_size: 48
+  num_workers: 8
   epochs: 30
   lr: 0.0008
   weight_decay: 0.0001
